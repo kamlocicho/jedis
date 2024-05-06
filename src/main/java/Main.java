@@ -26,19 +26,16 @@ public class Main {
             OutputStream output = clientSocket.getOutputStream();
 
             BufferedReader inputReader = new BufferedReader(new InputStreamReader(input));
+            String command;
+            while ((command = inputReader.readLine()) != null) {
+                System.out.println("Received command: " + command);
 
-            inputReader.readLine();
-            inputReader.readLine();
-
-            String command = inputReader.readLine();
-            System.out.println("Received command: " + command);
-
-            if(Objects.equals(command, "PING")) {
-                String res = "+PONG\r\n";
-                output.write(res.getBytes(StandardCharsets.UTF_8));
-                output.close();
+                if (Objects.equals(command, "PING")) {
+                    String res = "+PONG\r\n";
+                    output.write(res.getBytes(StandardCharsets.UTF_8));
+                    output.flush();
+                }
             }
-
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
         } finally {
