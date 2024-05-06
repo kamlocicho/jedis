@@ -1,29 +1,29 @@
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
-public class ClientHandler extends Thread {
 
-    private final OutputStream outputStream;
-    private final String command;
+public class ClientHandler implements Runnable {
+    private final Socket socket;
 
-    public ClientHandler(OutputStream outputStream, String command) {
-        this.outputStream = outputStream;
-        this.command = command;
+    public ClientHandler(Socket socket) {
+        this.socket = socket;
     }
 
     @Override
     public void run() {
-        if (Objects.equals(command, "PING")) {
-            System.out.println("Running command");
-            String res = "+PONG\r\n";
-            try {
-                outputStream.write(res.getBytes(StandardCharsets.UTF_8));
-                outputStream.flush();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        try (socket;
+             OutputStream outputStream = socket.getOutputStream();
+             InputStream inputStream = socket.getInputStream();
+             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.equalsIgnoreCase("PING")) { // Check if command is "PING"
+                    outputStream.write("+PONG\r\n".getBytes(StandardCharsets.UTF_8));
+                }
             }
+        } catch (IOException e) { // Connection-specific exception
+            System.out.println("IOException: " + e.getMessage());
         }
     }
 }
