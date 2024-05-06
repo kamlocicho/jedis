@@ -28,13 +28,9 @@ public class Main {
             BufferedReader inputReader = new BufferedReader(new InputStreamReader(input));
             String command;
             while ((command = inputReader.readLine()) != null) {
-                System.out.println("Received command: " + command);
+                ClientHandler client = new ClientHandler(output, command);
 
-                if (Objects.equals(command, "PING")) {
-                    String res = "+PONG\r\n";
-                    output.write(res.getBytes(StandardCharsets.UTF_8));
-                    output.flush();
-                }
+                client.start();
             }
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
