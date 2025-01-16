@@ -25,4 +25,8 @@ public class Storage {
     public void set(String key, String value) {
         data.put(key, value);
     }
+
+    public void remove(String key) {
+        data.remove(key);
+    }
 }
