@@ -18,6 +18,8 @@ public class CommandFactory {
             return new GetCommand(values);
         } else if (command.equalsIgnoreCase("SET")) {
             return new SetCommand(values);
+        } else if (command.equalsIgnoreCase("INFO")) {
+            return new InfoCommand(values);
         } else {
             return new UnknownCommand();
         }
