@@ -1,22 +1,29 @@
 package configuration.replication;
 
+import commons.Arguments;
+import commons.ReplicationIdGenerator;
+
 public class ReplicationConfiguration {
-    private static ReplicationConfigurationObject replicationConfigurationObject;
+    private static volatile ReplicationConfigurationObject replicationConfigurationObject;
 
     public static ReplicationConfigurationObject getInstance() {
-        synchronized (ReplicationConfiguration.class) {
-            if (replicationConfigurationObject == null) {
-                replicationConfigurationObject = initializeConfig();
+        if (replicationConfigurationObject == null) {
+            synchronized (ReplicationConfiguration.class) {
+                if (replicationConfigurationObject == null) {
+                    replicationConfigurationObject = initializeConfig();
+                }
             }
         }
         return replicationConfigurationObject;
     }
 
     private static ReplicationConfigurationObject initializeConfig() {
+        String role = Arguments.hasArgument("replicaof") ? "slave" : "master";
+        String masterReplicationId = "master".equals(role) ? ReplicationIdGenerator.generate() : "";
         return ReplicationConfigurationObject.builder()
-                .role("master")
+                .role(role)
                 .connectedSlaves(0)
-                .masterReplicationId("8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb")
+                .masterReplicationId(masterReplicationId)
                 .masterReplicationOffset(0)
                 .secondReplicationOffset(0)
                 .replicationBacklogActive(0)
