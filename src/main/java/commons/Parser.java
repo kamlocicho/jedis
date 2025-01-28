@@ -16,6 +16,7 @@ public class Parser {
                 .forEach(field -> {
                     field.setAccessible(true);
                     try {
+                        // TODO: Add support for nested objects
                         result.append(field.getName()).append(":").append(field.get(obj)).append("\n");
                     } catch (IllegalAccessException e) {
                         throw new RuntimeException("Error parsing object to bulk string: " + e.getMessage());

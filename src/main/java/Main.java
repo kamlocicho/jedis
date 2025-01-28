@@ -10,8 +10,10 @@ public class Main {
     public static void main(String[] args) {
         Arguments.parseArguments(args);
         if (Arguments.hasArgument("replicaof")) {
+            if (!Arguments.hasArgument("port")) {
+                throw new RuntimeException("Missing port argument");
+            }
             String[] data = Arguments.getArgument("replicaof").split(" ");
-
             SlaveConnection slaveConnection = new SlaveConnection(data[0], data[1]);
             Thread.ofVirtual().start(slaveConnection);
         }

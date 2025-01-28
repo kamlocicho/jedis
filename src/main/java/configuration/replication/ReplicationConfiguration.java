@@ -19,12 +19,12 @@ public class ReplicationConfiguration {
 
     private static ReplicationConfigurationObject initializeConfig() {
         String role = Arguments.hasArgument("replicaof") ? "slave" : "master";
-        String masterReplicationId = "master".equals(role) ? ReplicationIdGenerator.generate() : "";
+        String masterReplicationId = "master".equals(role) ? ReplicationIdGenerator.generate() : "?";
         return ReplicationConfigurationObject.builder()
                 .role(role)
                 .connectedSlaves(0)
                 .masterReplicationId(masterReplicationId)
-                .masterReplicationOffset(0)
+                .masterReplicationOffset(-1)
                 .secondReplicationOffset(0)
                 .replicationBacklogActive(0)
                 .replicationBacklogSize(1048576)

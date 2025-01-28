@@ -20,6 +20,10 @@ public class CommandFactory {
             return new SetCommand(values);
         } else if (command.equalsIgnoreCase("INFO")) {
             return new InfoCommand(values);
+        } else if (command.equalsIgnoreCase("REPLCONF")) {
+            return new ReplConfCommand(values);
+        } else if (command.equalsIgnoreCase("PSYNC")) {
+            return new PsyncCommand(values);
         } else {
             return new UnknownCommand();
         }
